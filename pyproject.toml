@@ -1,0 +1,10 @@
+[project]
+name = "TimeTap"
+version = "0.1.0"
+description = "A lightweight, thread-safe Python profiler for hierarchical code timing with GPU support"
+readme = "README.md"
+requires-python = ">=3.8"
+dependencies = []
+
+[project.optional-dependencies]
+torch = ["torch>=2.1.0"]
