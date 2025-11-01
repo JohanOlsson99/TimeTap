@@ -22,7 +22,6 @@ pip install "timetap[torch]"
 
 ```
 import time
-import threading
 import TimeTap  # package exposes timing utilities
 
 
@@ -33,51 +32,84 @@ def compute_sum(n=1_000_000):
         total += i
     return total
 
+
 with TimeTap.timeTap_log("session"):
     compute_sum()
     time.sleep(0.1)
     compute_sum()
-    # You can temporarily disable collection any time
-    TimeTap.disable_timeTap()
-    time.sleep(0.1)
-    compute_sum()
-    # And re-enable
-    TimeTap.enable_timeTap()
-    time.sleep(0.1)
-    compute_sum()
 
-# Get a pretty, hierarchical report
-print(TimeTap.timeTap_get_str())
+
 # Or print directly
 TimeTap.timeTap_print()
 
 # Reset collected metrics
 TimeTap.timeTap_reset()
+
+with TimeTap.timeTap_log("session-2"):
+    compute_sum()
+
+    # You can temporarily disable collection any time
+    TimeTap.disable_timeTap()
+    time.sleep(0.1)
+    compute_sum()
+
+    # And re-enable all again
+    TimeTap.enable_timeTap()
+    time.sleep(0.1)
+    compute_sum()
+
+TimeTap.timeTap_print()
 ```
 
+#### Output:
 ```
-RESULT
+-----------------------------------------------------------------------------------------------
+Function                 Runs    Total(ms)   Median(ms)      Avg(ms)      Min(ms)      Max(ms)
+-----------------------------------------------------------------------------------------------
+session                    1        132.6        132.6        132.6        132.6        132.6
+└─compute-sum              2         32.4         16.2         16.2         16.2         16.2
+
+WARNING:root:Disabling TimeTap timing measurements globally.
+-----------------------------------------------------------------------------------------------
+Function                 Runs    Total(ms)   Median(ms)      Avg(ms)      Min(ms)      Max(ms)
+-----------------------------------------------------------------------------------------------
+session-2                  1        250.9        250.9        250.9        250.9        250.9
+└─compute-sum              2         33.7         16.8         16.8         16.7         17.0
 ```
 
 ## Nested & GPU timing
 
 ```
+import time
+import TimeTap
+
 # Nested sections automatically appear as a hierarchy in the report
 with TimeTap.timeTap_log("pipeline"):
     with TimeTap.timeTap_log("stage-1"):
+        with TimeTap.timeTap_log("stage-2"):
+            with TimeTap.timeTap_log("stage-3"):
+                time.sleep(0.1)
+            time.sleep(0.1)
         time.sleep(0.05)
 
     # If installed with timetap[torch], set gpu=True to time CUDA work
     with TimeTap.timeTap_log("forward-pass", gpu=True):
-        # Example (pseudo-code):
-        # out = model(x); loss = out.sum(); loss.backward()
-        time.sleep(0.02)  # placeholder for GPU work
+        time.sleep(0.02)
 
 TimeTap.timeTap_print()
 ```
 > Tip: When gpu=True and PyTorch is available, TimeTap accounts for CUDA work so your timings include GPU kernels.
 
+#### Output:
 ```
+-----------------------------------------------------------------------------------------------
+Function                 Runs    Total(ms)   Median(ms)      Avg(ms)      Min(ms)      Max(ms)
+-----------------------------------------------------------------------------------------------
+pipeline                   1        270.6        270.6        270.6        270.6        270.6
+├─stage-1                  1        250.4        250.4        250.4        250.4        250.4
+├───stage-2                1        200.2        200.2        200.2        200.2        200.2
+├─────stage-3              1        100.1        100.1        100.1        100.1        100.1
+└─forward-pass             1         20.1         20.1         20.1         20.1         20.1
 ```
 
 ## API
