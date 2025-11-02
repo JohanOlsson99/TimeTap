@@ -41,7 +41,7 @@ class TimeTapHelperClass:
                 lambda: {"timings": [], "children": defaultdict(dict)}
             )
             cls._instance.max_depth = None
-            cls._instance.min_width_func = 20
+            cls._instance.min_width_func = 15
             cls._instance.max_width_func = 80
             cls._instance.have_printed_gpu_warning = False
             cls._instance.have_printed_enabled_warning = False
@@ -75,7 +75,7 @@ class TimeTapHelperClass:
             except NameError:
                 if not self.have_printed_gpu_warning:
                     warning(
-                        "torch not available, cannot synchronize GPU. Have you installed TimeTap[torch]?"
+                        "torch not available, cannot synchronize GPU. Have you installed timetap[torch]?"
                     )
                 self.have_printed_gpu_warning = True
 
@@ -83,7 +83,7 @@ class TimeTapHelperClass:
         """
         Context manager-style generator that times a code block and records metrics.
 
-        Intended to be used via the provided timeTap_log context manager wrapper.
+        Intended to be used via the provided log context manager wrapper.
         Behavior:
           - Optionally synchronizes CUDA when gpu=True (if torch is available).
           - Appends `text` to the current thread-local nested path.
@@ -256,7 +256,7 @@ class TimeTapHelperClass:
         """
         Enable or disable timing measurements globally.
 
-        When disabled, all subsequent timeTap_log contexts become no-ops.
+        When disabled, all subsequent log contexts become no-ops.
         """
         if (
             self.enabled != enabled

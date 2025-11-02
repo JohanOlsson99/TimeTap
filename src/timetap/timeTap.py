@@ -3,7 +3,7 @@ from timetap.TimeTapHelperClass import TimeTapHelperClass
 
 
 @contextmanager
-def timeTap_log(name: str, enable=True, verbose=False, gpu=False) -> None:
+def log(name: str, enable=True, verbose=False, gpu=False) -> None:
     """
     Public context manager for timing a block of code and recording metrics.
 
@@ -30,7 +30,7 @@ def timeTap_log(name: str, enable=True, verbose=False, gpu=False) -> None:
     )
 
 
-def timeTap_get_str() -> str:
+def get_table_str() -> str:
     """
     Return the current metrics report as a formatted string.
 
@@ -43,16 +43,16 @@ def timeTap_get_str() -> str:
     return TimeTapHelperClass().str_metrics()
 
 
-def timeTap_print() -> None:
+def print_table() -> None:
     """
     Print the current metrics report to stdout.
 
     Convenience function that calls timeTap_get_str() and prints its value.
     """
-    print(timeTap_get_str())
+    print(get_table_str())
 
 
-def timeTap_reset() -> None:
+def reset() -> None:
     """
     Reset and clear all recorded timing metrics.
 
@@ -62,7 +62,7 @@ def timeTap_reset() -> None:
     TimeTapHelperClass().reset()
 
 
-def disable_timeTap():
+def disable():
     """
     Disable all timing measurements globally.
 
@@ -72,7 +72,7 @@ def disable_timeTap():
     TimeTapHelperClass().set_enabled(False)
 
 
-def enable_timeTap():
+def enable():
     """
     Enable all timing measurements globally.
 

@@ -1,8 +1,8 @@
 from .timeTap import (
-    timeTap_log,
-    timeTap_get_str,
-    timeTap_print,
-    timeTap_reset,
-    disable_timeTap,
-    enable_timeTap,
+    log,
+    get_table_str,
+    print_table,
+    reset,
+    disable,
+    enable,
 )
