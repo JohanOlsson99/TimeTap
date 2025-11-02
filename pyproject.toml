@@ -1,6 +1,11 @@
 [project]
-name = "TimeTap"
+name = "timetap"
 version = "0.1.0"
+authors = [
+    {name = "Johan Olsson"}
+]
+license = "MIT"
+license-files = ["LICENSE"]
 description = "A lightweight, thread-safe Python profiler for hierarchical code timing with GPU support"
 readme = "README.md"
 requires-python = ">=3.8"
@@ -8,3 +13,24 @@ dependencies = []
 
 [project.optional-dependencies]
 torch = ["torch>=2.1.0"]
+
+[build-system]
+requires = ["uv_build >= 0.9.5, <0.10.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "build>=1.2.2.post1",
+    "twine>=6.1.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/JohanOlsson99/TimeTap"
+Issues = "https://github.com/JohanOlsson99/TimeTap/issues"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["timetap*"]

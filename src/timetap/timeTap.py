@@ -1,5 +1,5 @@
 from contextlib import contextmanager
-from TimeTap.TimeTapHelperClass import TimeTapHelperClass
+from timetap.TimeTapHelperClass import TimeTapHelperClass
 
 
 @contextmanager
